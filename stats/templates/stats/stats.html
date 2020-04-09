@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>COVID-19 Statistics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  	$(document).ready(function() {
+    $('#example').DataTable();
+} );
+window.onload = function() {
+var options = {
+	title: {
+		text: "Total Cases Pie Chart"
+	},
+	data: [{
+			type: "pie",
+			startAngle: 45,
+			showInLegend: "true",
+			legendText: "{label}",
+			indexLabel: "{label} ({y})",
+			yValueFormatString:"#,##0.#"%"",
+			dataPoints: [
+			{% for entry in all_entries %}
+				{ label: "{{ entry.place }}", y: {{ entry.total_cases }} },
+				{% endfor %}
+			]
+	}]
+};
+$("#chartContainer").CanvasJSChart(options);
+
+}
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>  
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+<style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: red;
+   color: white;
+   text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container-fluid">
+	<br/>
+  <center><h2>Covid 19 Statistics</h2></center>
+  <br/>
+
+  <center><p> <button type="button" class="btn btn-primary">Total Cases : {{ grand_total }}</button> 
+  	 <button type="button" class="btn btn-success">Total Recovered : {{ grand_recovered }}</button>
+  	 <button type="button" class="btn btn-warning">Total Active : {{ grand_active }}</button>
+  	 <button type="button" class="btn btn-danger">Total Deaths : {{ grand_deaths }}</button>
+  </p></center>    
+  <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+  <br/>
+  <table id="example" class="table table-striped table-hover ">
+    <thead>
+      <tr>
+        <th>State/UT</th>
+        <th>Total Cases</th>
+        <th>Recovered/Discharged/migrated</th>
+        <th>Deaths</th>
+      </tr>
+    </thead>
+    <tbody>{% for entry in all_entries %}
+      <tr>
+        <td>{{ entry.place }}</td>
+        <td>{{ entry.total_cases }}</td>
+        <td>{{ entry.recovered }}</td>
+        <td>{{ entry.deaths }}</td>
+      </tr>
+       {% endfor %}
+    </tbody>
+  </table>
+</div>
+<footer class="page-footer font-small blue">
+
+  <div class="footer-copyright text-center py-3">Developed by Harsha Surampudi
+  </div>
+
+</footer>
+</body>
+
+</html>
